@@ -1,0 +1,46 @@
+{
+    "name": "glpi-typescript-client",
+    "version": "0.0.1",
+    "description": "GLPI API Client written in Typescript",
+    "main": "dist/index",
+    "scripts": {
+        "test": "NODE_ENV=testing jest"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/aluisiora/glpi-typescript-client.git"
+    },
+    "keywords": [
+        "glpi",
+        "api",
+        "typescript"
+    ],
+    "author": "Aluisio R. Amaral",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/aluisiora/glpi-typescript-client/issues"
+    },
+    "homepage": "https://github.com/aluisiora/glpi-typescript-client#readme",
+    "dependencies": {
+        "@types/node": "^8.10.40",
+        "axios": "^0.18.0"
+    },
+    "devDependencies": {
+        "rimraf": "^2.6.3",
+        "tslint": "^5.12.1",
+        "typescript": "^3.3.3333"
+    },
+    "jest": {
+        "moduleFileExtensions": [
+            "js",
+            "json",
+            "ts"
+        ],
+        "rootDir": "src",
+        "testRegex": ".spec.ts$",
+        "transform": {
+            "^.+\\.(t|j)s$": "ts-jest"
+        },
+        "coverageDirectory": "../coverage"
+    }
+}
