@@ -11,6 +11,10 @@ export class GlpiSocket {
         this.setHeader(headers);
     }
 
+    public getHttp(): AxiosInstance {
+        return this.http;
+    }
+
     public setHeader(headers: any = {}) {
         this.http = this.makeHttpSocket(this.url, headers);
     }

@@ -1,5 +1,5 @@
 import { GlpiSocket } from './GlpiSocket';
-import { AxiosResponse } from 'axios';
+import { AxiosResponse, AxiosInstance } from 'axios';
 import { IGetItemParams } from './interfaces/IGetItemParams';
 import { IGetItemsParams } from './interfaces/IGetItemsParams';
 import { IGetMultipleItemsParams } from './interfaces/IGetMultipleItemsParams';
@@ -11,6 +11,10 @@ export class GlpiAPI {
 
     constructor(socket: GlpiSocket) {
         this.socket = socket;
+    }
+
+    public getHttpSocket(): AxiosInstance {
+        return this.socket.getHttp();
     }
 
     public async killSession(): Promise<AxiosResponse> {
