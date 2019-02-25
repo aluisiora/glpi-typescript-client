@@ -273,4 +273,24 @@ describe('GlpiAPI', () => {
         expect(socketCallSpy).toBeCalledWith('PUT', `${item}/${id}`, { data: { input } });
         expect(res).toBe(resolveValue);
     });
+
+    it('should deleteItem using a single id', async () => {
+        const item = 'Ticket';
+        const id = 4;
+        const res = await api.deleteItem(item, id);
+        expect(socketCallSpy).toBeCalledWith('DELETE', `${item}/${id}`, { params: {} });
+        expect(res).toBe(resolveValue);
+    });
+
+    it('should deleteItem using multiple ids', async () => {
+        const item = 'Ticket';
+        const ids = [4, 5, 6, 7];
+        const res = await api.deleteItem(item, ids);
+        expect(socketCallSpy).toBeCalledWith('DELETE', item, {
+            params: {
+                input: [{ id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }],
+            },
+        });
+        expect(res).toBe(resolveValue);
+    });
 });
