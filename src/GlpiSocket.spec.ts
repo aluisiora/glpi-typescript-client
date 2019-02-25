@@ -30,7 +30,7 @@ describe('GlpiSocket', () => {
                 },
                 request: async (obj: any): Promise<boolean> => {
                     expect(obj).toHaveProperty('url', path);
-                    expect(obj).toHaveProperty('method', method.toLocaleLowerCase());
+                    expect(obj).toHaveProperty('method', method.toLowerCase());
                     return true;
                 },
             };
@@ -69,7 +69,7 @@ describe('GlpiSocket', () => {
                 },
                 request: async (obj: any): Promise<boolean> => {
                     expect(obj).toHaveProperty('url', path);
-                    expect(obj).toHaveProperty('method', method.toLocaleLowerCase());
+                    expect(obj).toHaveProperty('method', method.toLowerCase());
                     return true;
                 },
             };
