@@ -122,4 +122,47 @@ describe('GlpiAPI', () => {
         expect(socketCallSpy).toBeCalledWith('GET', 'getGlpiConfig');
         expect(res).toBe(resolveValue);
     });
+
+    it('should getItem', async () => {
+        const item = 'Ticket';
+        const id = 4;
+        const options = {
+            get_hateoas: false,
+        };
+        const res = await api.getItem(item, id, options);
+        expect(socketCallSpy).toBeCalledWith('GET', `${item}/${id}`, {
+            params: options,
+        });
+        expect(res).toBe(resolveValue);
+    });
+
+    it('should getItems', async () => {
+        const item = 'Ticket';
+        const options = {
+            is_deleted: false,
+        };
+        const res = await api.getItems(item, options);
+        expect(socketCallSpy).toBeCalledWith('GET', item, {
+            params: options,
+        });
+        expect(res).toBe(resolveValue);
+    });
+
+    it('should getItems with params to be serialized', async () => {
+        const item = 'Ticket';
+        const options = {
+            searchText: {
+                name: 'somename',
+                email: 'someemail@example.com',
+            },
+        };
+        const res = await api.getItems(item, options);
+        expect(socketCallSpy).toBeCalledWith('GET', item, {
+            params: {
+                'searchText[name]': options.searchText.name,
+                'searchText[email]': options.searchText.email,
+            },
+        });
+        expect(res).toBe(resolveValue);
+    });
 });

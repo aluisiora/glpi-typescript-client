@@ -75,7 +75,8 @@ export class GlpiAPI {
     }
 
     public async getItems(item_type: string, options: IGetItemsParams = {}): Promise<AxiosResponse> {
-        return this.socket.call('GET', item_type, { params: options });
+        const serializedParams = this.serializeObjectForGetMethod(['searchText'], options);
+        return this.socket.call('GET', item_type, { params: serializedParams });
     }
 
     public async getSubitems(
@@ -132,7 +133,7 @@ export class GlpiAPI {
     }
 
     private serializeArrayForGetMethod(originalKeys: string[], options: any) {
-        const serializedOptions: any = Object.assign({}, options);
+        const serializedOptions: any = { ...options };
 
         for (const originalKey of originalKeys) {
             if (!options[originalKey] || !Array.isArray(options[originalKey])) continue;
@@ -165,6 +166,25 @@ export class GlpiAPI {
                         serializedOptions[serializedKey] = item[key];
                     }
                 }
+            }
+
+            delete serializedOptions[originalKey];
+        }
+
+        return serializedOptions;
+    }
+
+    private serializeObjectForGetMethod(originalKeys: string[], options: any) {
+        const serializedOptions: any = { ...options };
+
+        for (const originalKey of originalKeys) {
+            if (typeof options[originalKey] !== 'object') continue;
+
+            const subkeys = Object.keys(options[originalKey]);
+
+            for (const subkey of subkeys) {
+                const newKey = `${originalKey}[${subkey}]`;
+                serializedOptions[newKey] = options[originalKey][subkey];
             }
 
             delete serializedOptions[originalKey];
