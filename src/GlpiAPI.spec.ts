@@ -214,4 +214,38 @@ describe('GlpiAPI', () => {
         expect(socketCallSpy).toBeCalledWith('GET', `listSearchOptions/${item}`, { params: { raw } });
         expect(res).toBe(resolveValue);
     });
+
+    it('should search with params to be serialized', async () => {
+        const item = 'Ticket';
+        const options = {
+            sort: 15,
+            criteria: [
+                {
+                    field: '15',
+                    searchtype: 'equals',
+                    value: 'test',
+                },
+                {
+                    link: 'AND',
+                    field: '18',
+                    searchtype: 'equals',
+                    value: 'test2',
+                },
+            ],
+        };
+        const res = await api.search(item, options);
+        expect(socketCallSpy).toBeCalledWith('GET', `search/${item}`, {
+            params: {
+                'sort': 15,
+                'criteria[0][field]': options.criteria[0].field,
+                'criteria[0][searchtype]': options.criteria[0].searchtype,
+                'criteria[0][value]': options.criteria[0].value,
+                'criteria[1][link]': options.criteria[1].link,
+                'criteria[1][field]': options.criteria[1].field,
+                'criteria[1][searchtype]': options.criteria[1].searchtype,
+                'criteria[1][value]': options.criteria[1].value,
+            },
+        });
+        expect(res).toBe(resolveValue);
+    });
 });
