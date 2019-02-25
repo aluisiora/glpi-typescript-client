@@ -30,27 +30,30 @@ export class GlpiAPI {
         return this.socket.call('put', 'lostPassword', { data: body });
     }
 
-    public async getMyProfiles() {
+    public async getMyProfiles(): Promise<AxiosResponse> {
         return this.socket.call('get', 'getMyProfiles');
     }
 
-    public async getActiveProfile() {
+    public async getActiveProfile(): Promise<AxiosResponse> {
         return this.socket.call('get', 'getActiveProfile');
     }
 
-    public async changeActiveProfile(profiles_id: number) {
+    public async changeActiveProfile(profiles_id: number): Promise<AxiosResponse> {
         return this.socket.call('post', 'changeActiveProfile', { data: { profiles_id } });
     }
 
-    public async getMyEntities(is_recursive: boolean = false) {
+    public async getMyEntities(is_recursive: boolean = false): Promise<AxiosResponse> {
         return this.socket.call('get', 'getMyEntities', { params: { is_recursive } });
     }
 
-    public async getActiveEntities() {
+    public async getActiveEntities(): Promise<AxiosResponse> {
         return this.socket.call('get', 'getActiveEntities');
     }
 
-    public async changeActiveEntities(entities_id: string | number = 'all', is_recursive: boolean = false) {
+    public async changeActiveEntities(
+        entities_id: string | number = 'all',
+        is_recursive: boolean = false,
+    ): Promise<AxiosResponse> {
         return this.socket.call('post', 'changeActiveEntities', {
             data: {
                 entities_id,
@@ -59,53 +62,62 @@ export class GlpiAPI {
         });
     }
 
-    public async getFullSession() {
+    public async getFullSession(): Promise<AxiosResponse> {
         return this.socket.call('get', 'getFullSession');
     }
 
-    public async getGlpiConfig() {
+    public async getGlpiConfig(): Promise<AxiosResponse> {
         return this.socket.call('get', 'getGlpiConfig');
     }
 
-    public async getItem(item_type: string, id: number, options: IGetItemParams = {}) {
+    public async getItem(item_type: string, id: number, options: IGetItemParams = {}): Promise<AxiosResponse> {
         return this.socket.call('get', `${item_type}/${id}`, { params: options });
     }
 
-    public async getItems(item_type: string, options: IGetItemsParams = {}) {
+    public async getItems(item_type: string, options: IGetItemsParams = {}): Promise<AxiosResponse> {
         return this.socket.call('get', item_type, { params: options });
     }
 
-    public async getSubitems(item_type: string, id: number, subitem_type: string, options: IGetItemsParams = {}) {
+    public async getSubitems(
+        item_type: string,
+        id: number,
+        subitem_type: string,
+        options: IGetItemsParams = {},
+    ): Promise<AxiosResponse> {
         return this.socket.call('get', `${item_type}/${id}/${subitem_type}`, { params: options });
     }
 
-    public async getMultipleItems(options: IGetMultipleItemsParams) {
+    public async getMultipleItems(options: IGetMultipleItemsParams): Promise<AxiosResponse> {
         const serializedParams = this.serializeArrayForGetMethod(['items'], options);
 
         return this.socket.call('get', 'getMultipleItems', { params: serializedParams });
     }
 
-    public async listSearchOptions(item_type: string, raw?: any) {
+    public async listSearchOptions(item_type: string, raw?: any): Promise<AxiosResponse> {
         const params: any = {};
         if (raw) params.raw = raw;
         return this.socket.call('get', `listSearchOptions/${item_type}`, { params });
     }
 
-    public async search(item_type: string, options: ISearchParams = {}) {
+    public async search(item_type: string, options: ISearchParams = {}): Promise<AxiosResponse> {
         const serializedParams = this.serializeArrayForGetMethod(['criteria', 'forcedisplay'], options);
 
         return this.socket.call('get', `search/${item_type}`, { params: serializedParams });
     }
 
-    public async addItem(item_type: string, input: any = {}) {
+    public async addItem(item_type: string, input: any = {}): Promise<AxiosResponse> {
         return this.socket.call('post', item_type, { data: { input } });
     }
 
-    public async updateItem(item_type: string, id: number, input: any = {}) {
+    public async updateItem(item_type: string, id: number, input: any = {}): Promise<AxiosResponse> {
         return this.socket.call('put', `${item_type}/${id}`, { data: { input } });
     }
 
-    public async deleteItem(item_type: string, id: number | number[], options: IDeleteItemParams = {}) {
+    public async deleteItem(
+        item_type: string,
+        id: number | number[],
+        options: IDeleteItemParams = {},
+    ): Promise<AxiosResponse> {
         if (Array.isArray(id)) {
             const params: any = Object.assign(
                 {
