@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import { GlpiResponseException } from './GlpiResponseException';
 
 export class GlpiSocket {
     private http: AxiosInstance;
@@ -15,15 +16,19 @@ export class GlpiSocket {
     }
 
     public async call(method: string, path: string, options: any = {}): Promise<AxiosResponse> {
-        return this.http.request(
-            Object.assign(
-                {
-                    url: path,
-                    method: method.toLowerCase(),
-                },
-                options,
-            ),
-        );
+        try {
+            return await this.http.request(
+                Object.assign(
+                    {
+                        url: path,
+                        method: method.toLowerCase(),
+                    },
+                    options,
+                ),
+            );
+        } catch (error) {
+            throw new GlpiResponseException(error);
+        }
     }
 
     private makeHttpSocket(url: string, extraHeaders: any = {}) {
