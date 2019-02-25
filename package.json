@@ -4,7 +4,12 @@
     "description": "GLPI API Client written in Typescript",
     "main": "dist/index",
     "scripts": {
-        "test": "NODE_ENV=testing jest"
+        "build": "rimraf dist && tsc",
+        "watch": "rimraf dist && tsc -w",
+        "prepublishOnly": "rimraf dist && tsc",
+        "test": "NODE_ENV=testing jest",
+        "test:cov": "NODE_ENV=testing jest --coverage",
+        "test:e2e": "NODE_ENV=testing jest --config ./test/jest-e2e.json"
     },
     "repository": {
         "type": "git",

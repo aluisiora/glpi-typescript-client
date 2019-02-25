@@ -2,9 +2,9 @@ import { GlpiSocket } from './GlpiSocket';
 import { AxiosResponse } from 'axios';
 import { IGetItemParams } from './interfaces/IGetItemParams';
 import { IGetItemsParams } from './interfaces/IGetItemsParams';
-import { IGetMultipleItemsParams } from 'interfaces/IGetMultipleItemsParams';
-import { ISearchParams } from 'interfaces/ISearchParams';
-import { IDeleteItemParams } from 'interfaces/IDeleteItemParams';
+import { IGetMultipleItemsParams } from './interfaces/IGetMultipleItemsParams';
+import { ISearchParams } from './interfaces/ISearchParams';
+import { IDeleteItemParams } from './interfaces/IDeleteItemParams';
 
 export class GlpiAPI {
     private socket: GlpiSocket;
@@ -80,7 +80,9 @@ export class GlpiAPI {
     }
 
     public async getMultipleItems(options: IGetMultipleItemsParams) {
-        return this.socket.call('get', 'getMultipleItems', { params: options });
+        const serializedParams = this.serializeArrayForGetMethod(['items'], options);
+
+        return this.socket.call('get', 'getMultipleItems', { params: serializedParams });
     }
 
     public async listSearchOptions(item_type: string, raw?: any) {
@@ -90,7 +92,9 @@ export class GlpiAPI {
     }
 
     public async search(item_type: string, options: ISearchParams = {}) {
-        return this.socket.call('get', `search/${item_type}`, { params: options });
+        const serializedParams = this.serializeArrayForGetMethod(['criteria', 'forcedisplay'], options);
+
+        return this.socket.call('get', `search/${item_type}`, { params: serializedParams });
     }
 
     public async addItem(item_type: string, input: any = {}) {
@@ -113,5 +117,47 @@ export class GlpiAPI {
         } else {
             return this.socket.call('delete', `${item_type}/${id}`, { params: options });
         }
+    }
+
+    private serializeArrayForGetMethod(originalKeys: string[], options: any) {
+        const serializedOptions: any = Object.assign({}, options);
+
+        for (const originalKey of originalKeys) {
+            if (!options[originalKey] || !Array.isArray(options[originalKey])) continue;
+
+            const arr = options[originalKey];
+
+            for (let index = 0; index < arr.length; index++) {
+                const item = arr[index];
+
+                const keys = Object.keys(item);
+
+                for (const key of keys) {
+                    // If the subitem is also an array, we will need to
+                    // stitch the subitem key with the root key
+                    if (Array.isArray(item[key])) {
+                        const newObj = { [key]: item[key] };
+
+                        const serializedSubitem = this.serializeArrayForGetMethod([key], newObj);
+
+                        const subkeys = Object.keys(serializedSubitem);
+
+                        for (const subkey of subkeys) {
+                            // Transform the key into something like: criteria[0][criteria][2][field]
+                            const newKey = `${originalKey}[${index}][${key}]${subkey.replace(originalKey, '')}`;
+                            serializedOptions[newKey] = serializedSubitem[subkey];
+                        }
+                    } else {
+                        // Transform the key into something like: criteria[0][field]
+                        const serializedKey = `${originalKey}[${index}][${key}]`;
+                        serializedOptions[serializedKey] = item[key];
+                    }
+                }
+            }
+
+            delete serializedOptions[originalKey];
+        }
+
+        return serializedOptions;
     }
 }

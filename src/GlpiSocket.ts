@@ -19,7 +19,7 @@ export class GlpiSocket {
             Object.assign(
                 {
                     url: path,
-                    method: method.toLocaleLowerCase(),
+                    method: method.toLowerCase(),
                 },
                 options,
             ),

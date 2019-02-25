@@ -1,6 +1,6 @@
 import { IAuthParams } from './interfaces/IAuthParams';
-import { GlpiSocket } from 'GlpiSocket';
-import { GlpiAPI } from 'GlpiAPI';
+import { GlpiSocket } from './GlpiSocket';
+import { GlpiAPI } from './GlpiAPI';
 
 export class GlpiClient {
     private url: string;
