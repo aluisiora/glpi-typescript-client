@@ -199,4 +199,19 @@ describe('GlpiAPI', () => {
         });
         expect(res).toBe(resolveValue);
     });
+
+    it('should listSearchOptions without raw param', async () => {
+        const item = 'Ticket';
+        const res = await api.listSearchOptions(item);
+        expect(socketCallSpy).toBeCalledWith('GET', `listSearchOptions/${item}`, { params: {} });
+        expect(res).toBe(resolveValue);
+    });
+
+    it('should listSearchOptions with raw param', async () => {
+        const item = 'Ticket';
+        const raw = true;
+        const res = await api.listSearchOptions(item, raw);
+        expect(socketCallSpy).toBeCalledWith('GET', `listSearchOptions/${item}`, { params: { raw } });
+        expect(res).toBe(resolveValue);
+    });
 });

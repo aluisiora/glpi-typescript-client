@@ -95,7 +95,7 @@ export class GlpiAPI {
         return this.socket.call('GET', 'getMultipleItems', { params: serializedParams });
     }
 
-    public async listSearchOptions(item_type: string, raw?: any): Promise<AxiosResponse> {
+    public async listSearchOptions(item_type: string, raw?: boolean): Promise<AxiosResponse> {
         const params: any = {};
         if (raw) params.raw = raw;
         return this.socket.call('GET', `listSearchOptions/${item_type}`, { params });
