@@ -14,7 +14,7 @@ export class GlpiAPI {
     }
 
     public async killSession(): Promise<AxiosResponse> {
-        return this.socket.call('get', 'killSession');
+        return this.socket.call('GET', 'killSession');
     }
 
     public async lostPassword(email: string, passwordForgetToken?: string, password?: string): Promise<AxiosResponse> {
@@ -27,34 +27,34 @@ export class GlpiAPI {
             body.password = password;
         }
 
-        return this.socket.call('put', 'lostPassword', { data: body });
+        return this.socket.call('PUT', 'lostPassword', { data: body });
     }
 
     public async getMyProfiles(): Promise<AxiosResponse> {
-        return this.socket.call('get', 'getMyProfiles');
+        return this.socket.call('GET', 'getMyProfiles');
     }
 
     public async getActiveProfile(): Promise<AxiosResponse> {
-        return this.socket.call('get', 'getActiveProfile');
+        return this.socket.call('GET', 'getActiveProfile');
     }
 
     public async changeActiveProfile(profiles_id: number): Promise<AxiosResponse> {
-        return this.socket.call('post', 'changeActiveProfile', { data: { profiles_id } });
+        return this.socket.call('POST', 'changeActiveProfile', { data: { profiles_id } });
     }
 
     public async getMyEntities(is_recursive: boolean = false): Promise<AxiosResponse> {
-        return this.socket.call('get', 'getMyEntities', { params: { is_recursive } });
+        return this.socket.call('GET', 'getMyEntities', { params: { is_recursive } });
     }
 
     public async getActiveEntities(): Promise<AxiosResponse> {
-        return this.socket.call('get', 'getActiveEntities');
+        return this.socket.call('GET', 'getActiveEntities');
     }
 
     public async changeActiveEntities(
         entities_id: string | number = 'all',
         is_recursive: boolean = false,
     ): Promise<AxiosResponse> {
-        return this.socket.call('post', 'changeActiveEntities', {
+        return this.socket.call('POST', 'changeActiveEntities', {
             data: {
                 entities_id,
                 is_recursive,
@@ -63,19 +63,19 @@ export class GlpiAPI {
     }
 
     public async getFullSession(): Promise<AxiosResponse> {
-        return this.socket.call('get', 'getFullSession');
+        return this.socket.call('GET', 'getFullSession');
     }
 
     public async getGlpiConfig(): Promise<AxiosResponse> {
-        return this.socket.call('get', 'getGlpiConfig');
+        return this.socket.call('GET', 'getGlpiConfig');
     }
 
     public async getItem(item_type: string, id: number, options: IGetItemParams = {}): Promise<AxiosResponse> {
-        return this.socket.call('get', `${item_type}/${id}`, { params: options });
+        return this.socket.call('GET', `${item_type}/${id}`, { params: options });
     }
 
     public async getItems(item_type: string, options: IGetItemsParams = {}): Promise<AxiosResponse> {
-        return this.socket.call('get', item_type, { params: options });
+        return this.socket.call('GET', item_type, { params: options });
     }
 
     public async getSubitems(
@@ -84,33 +84,33 @@ export class GlpiAPI {
         subitem_type: string,
         options: IGetItemsParams = {},
     ): Promise<AxiosResponse> {
-        return this.socket.call('get', `${item_type}/${id}/${subitem_type}`, { params: options });
+        return this.socket.call('GET', `${item_type}/${id}/${subitem_type}`, { params: options });
     }
 
     public async getMultipleItems(options: IGetMultipleItemsParams): Promise<AxiosResponse> {
         const serializedParams = this.serializeArrayForGetMethod(['items'], options);
 
-        return this.socket.call('get', 'getMultipleItems', { params: serializedParams });
+        return this.socket.call('GET', 'getMultipleItems', { params: serializedParams });
     }
 
     public async listSearchOptions(item_type: string, raw?: any): Promise<AxiosResponse> {
         const params: any = {};
         if (raw) params.raw = raw;
-        return this.socket.call('get', `listSearchOptions/${item_type}`, { params });
+        return this.socket.call('GET', `listSearchOptions/${item_type}`, { params });
     }
 
     public async search(item_type: string, options: ISearchParams = {}): Promise<AxiosResponse> {
         const serializedParams = this.serializeArrayForGetMethod(['criteria', 'forcedisplay'], options);
 
-        return this.socket.call('get', `search/${item_type}`, { params: serializedParams });
+        return this.socket.call('GET', `search/${item_type}`, { params: serializedParams });
     }
 
     public async addItem(item_type: string, input: any = {}): Promise<AxiosResponse> {
-        return this.socket.call('post', item_type, { data: { input } });
+        return this.socket.call('POST', item_type, { data: { input } });
     }
 
     public async updateItem(item_type: string, id: number, input: any = {}): Promise<AxiosResponse> {
-        return this.socket.call('put', `${item_type}/${id}`, { data: { input } });
+        return this.socket.call('PUT', `${item_type}/${id}`, { data: { input } });
     }
 
     public async deleteItem(
@@ -125,9 +125,9 @@ export class GlpiAPI {
                 },
                 options,
             );
-            return this.socket.call('delete', item_type, { params });
+            return this.socket.call('DELETE', item_type, { params });
         } else {
-            return this.socket.call('delete', `${item_type}/${id}`, { params: options });
+            return this.socket.call('DELETE', `${item_type}/${id}`, { params: options });
         }
     }
 
