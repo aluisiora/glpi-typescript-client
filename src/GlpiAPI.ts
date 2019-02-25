@@ -85,7 +85,8 @@ export class GlpiAPI {
         subitem_type: string,
         options: IGetItemsParams = {},
     ): Promise<AxiosResponse> {
-        return this.socket.call('GET', `${item_type}/${id}/${subitem_type}`, { params: options });
+        const serializedParams = this.serializeObjectForGetMethod(['searchText'], options);
+        return this.socket.call('GET', `${item_type}/${id}/${subitem_type}`, { params: serializedParams });
     }
 
     public async getMultipleItems(options: IGetMultipleItemsParams): Promise<AxiosResponse> {
