@@ -37,9 +37,9 @@ const api = await client.initSession({
 });
 ```
 
-After the login, we get an `api` object which is an instance of `GlpiAPI` class that enables us to call other glpi methods as we wish, you can find all methods in the [GLPI API Documentation](https://github.com/glpi-project/glpi/blob/master/apirest.md).
+After the login, we get an `api` object which is an instance of `GlpiAPI` class that enables us to call other glpi methods as we wish, you can find all methods implemented here in the [GLPI API Documentation](https://github.com/glpi-project/glpi/blob/master/apirest.md).
 
-Every method called returns an `AxiosResponse` object, you can find more about axios (here)[https://github.com/axios/axios]. Let's get the profiles of the logged user:
+Every method called returns an `AxiosResponse` object, you can find more about axios [here](https://github.com/axios/axios). Let's get the profiles of the logged user:
 
 ```javascript
 const { GlpiClient } = require("glpi-client");
