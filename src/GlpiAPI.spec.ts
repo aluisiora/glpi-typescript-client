@@ -248,4 +248,29 @@ describe('GlpiAPI', () => {
         });
         expect(res).toBe(resolveValue);
     });
+
+    it('should addItem', async () => {
+        const item = 'Ticket';
+        const input = {
+            somekey: 'somevalue',
+            name: 'somename',
+            title: 'sometitle',
+        };
+        const res = await api.addItem(item, input);
+        expect(socketCallSpy).toBeCalledWith('POST', item, { data: { input } });
+        expect(res).toBe(resolveValue);
+    });
+
+    it('should updateItem', async () => {
+        const item = 'Ticket';
+        const id = 4;
+        const input = {
+            somekey: 'somevalue',
+            name: 'somename',
+            title: 'sometitle',
+        };
+        const res = await api.updateItem(item, id, input);
+        expect(socketCallSpy).toBeCalledWith('PUT', `${item}/${id}`, { data: { input } });
+        expect(res).toBe(resolveValue);
+    });
 });
