@@ -1,5 +1,5 @@
 {
-    "name": "glpi-typescript-client",
+    "name": "glpi-client",
     "version": "1.0.0",
     "description": "GLPI API Client written in Typescript",
     "main": "dist/index",
