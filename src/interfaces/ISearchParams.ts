@@ -13,7 +13,7 @@ export interface ISearchParams {
     sort?: number;
     order?: string;
     range?: string;
-    forcedisplay?: any[];
+    forcedisplay?: number[];
     rawdata?: boolean;
     withindexes?: boolean;
     uid_cols?: boolean;

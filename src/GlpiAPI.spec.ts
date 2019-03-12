@@ -232,6 +232,7 @@ describe('GlpiAPI', () => {
                     value: 'test2',
                 },
             ],
+            forcedisplay: [0, 1, 10, 80],
         };
         const res = await api.search(item, options);
         expect(socketCallSpy).toBeCalledWith('GET', `search/${item}`, {
@@ -244,6 +245,10 @@ describe('GlpiAPI', () => {
                 'criteria[1][field]': options.criteria[1].field,
                 'criteria[1][searchtype]': options.criteria[1].searchtype,
                 'criteria[1][value]': options.criteria[1].value,
+                'forcedisplay[0]': options.forcedisplay[0],
+                'forcedisplay[1]': options.forcedisplay[1],
+                'forcedisplay[2]': options.forcedisplay[2],
+                'forcedisplay[3]': options.forcedisplay[3],
             },
         });
         expect(res).toBe(resolveValue);

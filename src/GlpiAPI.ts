@@ -148,27 +148,33 @@ export class GlpiAPI {
             for (let index = 0; index < arr.length; index++) {
                 const item = arr[index];
 
-                const keys = Object.keys(item);
+                if (typeof item !== 'object') {
+                    // Transform the key into something like: forcedisplay[0]
+                    const serializedKey = `${originalKey}[${index}]`;
+                    serializedOptions[serializedKey] = item;
+                } else {
+                    const keys = Object.keys(item);
 
-                for (const key of keys) {
-                    // If the subitem is also an array, we will need to
-                    // stitch the subitem key with the root key
-                    if (Array.isArray(item[key])) {
-                        const newObj = { [key]: item[key] };
+                    for (const key of keys) {
+                        // If the subitem is also an array, we will need to
+                        // stitch the subitem key with the root key
+                        if (Array.isArray(item[key])) {
+                            const newObj = { [key]: item[key] };
 
-                        const serializedSubitem = this.serializeArrayForGetMethod([key], newObj);
+                            const serializedSubitem = this.serializeArrayForGetMethod([key], newObj);
 
-                        const subkeys = Object.keys(serializedSubitem);
+                            const subkeys = Object.keys(serializedSubitem);
 
-                        for (const subkey of subkeys) {
-                            // Transform the key into something like: criteria[0][criteria][2][field]
-                            const newKey = `${originalKey}[${index}][${key}]${subkey.replace(originalKey, '')}`;
-                            serializedOptions[newKey] = serializedSubitem[subkey];
+                            for (const subkey of subkeys) {
+                                // Transform the key into something like: criteria[0][criteria][2][field]
+                                const newKey = `${originalKey}[${index}][${key}]${subkey.replace(originalKey, '')}`;
+                                serializedOptions[newKey] = serializedSubitem[subkey];
+                            }
+                        } else {
+                            // Transform the key into something like: criteria[0][field]
+                            const serializedKey = `${originalKey}[${index}][${key}]`;
+                            serializedOptions[serializedKey] = item[key];
                         }
-                    } else {
-                        // Transform the key into something like: criteria[0][field]
-                        const serializedKey = `${originalKey}[${index}][${key}]`;
-                        serializedOptions[serializedKey] = item[key];
                     }
                 }
             }
