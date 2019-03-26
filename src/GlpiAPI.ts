@@ -17,7 +17,11 @@ export class GlpiAPI {
         return this.socket.getHttp();
     }
 
-    public setHttpSocket(socket: GlpiSocket) {
+    public getSocket(): GlpiSocket {
+        return this.socket;
+    }
+
+    public setSocket(socket: GlpiSocket) {
         this.socket = socket;
     }
 
