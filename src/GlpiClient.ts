@@ -9,7 +9,7 @@ export class GlpiClient {
         this.url = url;
     }
 
-    public async initSession(auth: IAuthParams): Promise<any> {
+    public async initSession(auth: IAuthParams): Promise<GlpiAPI> {
         let authorization = '';
         if (auth.user) {
             const b64 = Buffer.from(`${auth.user.username}:${auth.user.password}`).toString('base64');

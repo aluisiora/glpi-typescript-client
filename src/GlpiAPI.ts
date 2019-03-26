@@ -17,6 +17,10 @@ export class GlpiAPI {
         return this.socket.getHttp();
     }
 
+    public setHttpSocket(socket: GlpiSocket) {
+        this.socket = socket;
+    }
+
     public async killSession(): Promise<AxiosResponse> {
         return this.socket.call('GET', 'killSession');
     }
@@ -90,7 +94,9 @@ export class GlpiAPI {
         options: IGetItemsParams = {},
     ): Promise<AxiosResponse> {
         const serializedParams = this.serializeObjectForGetMethod(['searchText'], options);
-        return this.socket.call('GET', `${item_type}/${id}/${subitem_type}`, { params: serializedParams });
+        return this.socket.call('GET', `${item_type}/${id}/${subitem_type}`, {
+            params: serializedParams,
+        });
     }
 
     public async getMultipleItems(options: IGetMultipleItemsParams): Promise<AxiosResponse> {
