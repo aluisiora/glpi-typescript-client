@@ -9,6 +9,8 @@ import { IDeleteItemParams } from './interfaces/IDeleteItemParams';
 export class GlpiAPI {
     private socket: GlpiSocket;
 
+    private reloginInterceptor: number;
+
     constructor(socket: GlpiSocket) {
         this.socket = socket;
     }
@@ -25,8 +27,16 @@ export class GlpiAPI {
         this.socket = socket;
     }
 
+    public setReloginInterceptor(interceptor: number) {
+        this.reloginInterceptor = interceptor;
+    }
+
     public async killSession(): Promise<AxiosResponse> {
-        return this.socket.call('GET', 'killSession');
+        const response = this.socket.call('GET', 'killSession');
+        if (this.reloginInterceptor) {
+            this.getHttpSocket().interceptors.request.eject(this.reloginInterceptor);
+        }
+        return response;
     }
 
     public async lostPassword(email: string, passwordForgetToken?: string, password?: string): Promise<AxiosResponse> {
