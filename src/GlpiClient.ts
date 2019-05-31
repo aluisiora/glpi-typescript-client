@@ -43,7 +43,7 @@ export class GlpiClient {
         return api;
     }
 
-    private async ajustRelogin(api: GlpiAPI, auth: IAuthParams) {
+    private ajustRelogin(api: GlpiAPI, auth: IAuthParams) {
         const http = api.getHttpSocket();
         const interceptor: number = http.interceptors.response.use(
             response => {
@@ -57,7 +57,6 @@ export class GlpiClient {
                     // If the glpi api is being recreated,
                     // hold the request for 3 seconds
                     if (this.isReloging) {
-                        // console.log('delaying after trying to relogin already');
                         await new Promise(resolve => setTimeout(resolve, 3000));
                     } else {
                         this.reloginTries++;
@@ -80,8 +79,6 @@ export class GlpiClient {
 
                             this.isReloging = false;
                         } catch (error) {}
-
-                        this.isReloging = false;
                     }
 
                     Object.assign(error.config, this.httpDefaults);
