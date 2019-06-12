@@ -27,7 +27,7 @@
     },
     "homepage": "https://github.com/aluisiora/glpi-typescript-client#readme",
     "dependencies": {
-        "axios": "^0.19.0"
+        "axios": "*"
     },
     "devDependencies": {
         "@types/cors": "^2.8.5",
