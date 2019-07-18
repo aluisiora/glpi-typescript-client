@@ -5,10 +5,6 @@ import { GlpiAPI } from './GlpiAPI';
 export class GlpiClient {
     private url: string;
 
-    private isReloging: boolean = false;
-
-    private reloginTries: number = 0;
-
     private httpDefaults: any = {};
 
     constructor(url: string) {
@@ -45,48 +41,25 @@ export class GlpiClient {
 
     private ajustRelogin(api: GlpiAPI, auth: IAuthParams) {
         const http = api.getHttpSocket();
-        const interceptor: number = http.interceptors.response.use(
-            response => {
-                this.reloginTries = 0;
-                return response;
-            },
-            async error => {
-                const status = error.response ? error.response.status : 0;
+        const interceptor: number = http.interceptors.response.use(undefined, async error => {
+            const status = error.response ? error.response.status : 0;
 
-                if (status === 401) {
-                    // If the glpi api is being recreated,
-                    // hold the request for 3 seconds
-                    if (this.isReloging) {
-                        await new Promise(resolve => setTimeout(resolve, 3000));
-                    } else {
-                        this.reloginTries++;
-                        this.isReloging = true;
+            if (status === 401) {
+                const client = new GlpiClient(this.url);
+                const newApi = await client.initSession(auth);
 
-                        if (this.reloginTries > 3) {
-                            if (this.reloginTries > 60) this.reloginTries = 60;
-                            await new Promise(resolve => setTimeout(resolve, 1000 * this.reloginTries));
-                        }
+                const originalHttp = api.getHttpSocket();
+                const newHttp = newApi.getHttpSocket();
 
-                        try {
-                            const client = new GlpiClient(this.url);
-                            const newApi = await client.initSession(auth);
+                Object.assign(originalHttp.defaults, newHttp.defaults);
+                Object.assign(this.httpDefaults, originalHttp.defaults);
 
-                            const originalHttp = api.getHttpSocket();
-                            const newHttp = newApi.getHttpSocket();
+                Object.assign(error.config, this.httpDefaults);
+                return api.getHttpSocket().request(error.config);
+            }
 
-                            Object.assign(originalHttp.defaults, newHttp.defaults);
-                            Object.assign(this.httpDefaults, originalHttp.defaults);
-
-                            this.isReloging = false;
-                        } catch (error) {}
-                    }
-
-                    Object.assign(error.config, this.httpDefaults);
-                    return api.getHttpSocket().request(error.config);
-                }
-                throw error;
-            },
-        );
+            throw error;
+        });
         api.setReloginInterceptor(interceptor);
     }
 }
