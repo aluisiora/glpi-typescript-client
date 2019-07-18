@@ -35,6 +35,15 @@ const api = await client.initSession({
         password: "123456"
     }
 });
+
+// If you want to auto-relogin, use the third parameter
+const api = await client.initSession(
+    {
+        appToken: "somereallylongapptoken",
+        userToken: "somereallylongusertoken"
+    },
+    true
+);
 ```
 
 After the login, we get an `api` object which is an instance of `GlpiAPI` class that enables us to call other glpi methods as we wish, you can find all methods implemented here in the [GLPI API Documentation](https://github.com/glpi-project/glpi/blob/master/apirest.md).
