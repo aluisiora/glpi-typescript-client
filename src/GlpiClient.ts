@@ -25,7 +25,7 @@ export class GlpiClient {
             'App-Token': auth.appToken,
         });
 
-        const response = await socket.call('GET', 'initSession');
+        const response = await socket.call<{ session_token: string }>('GET', 'initSession');
 
         const authenticatedSocket = new GlpiSocket(this.url, {
             'App-Token': auth.appToken,

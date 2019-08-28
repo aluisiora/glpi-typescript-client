@@ -19,9 +19,9 @@ export class GlpiSocket {
         this.http = this.makeHttpSocket(this.url, headers);
     }
 
-    public async call(method: string, path: string, options: any = {}): Promise<AxiosResponse> {
+    public async call<T>(method: string, path: string, options: any = {}): Promise<AxiosResponse<T>> {
         try {
-            return await this.http.request(
+            return await this.http.request<T>(
                 Object.assign(
                     {
                         url: path,
